@@ -55,6 +55,8 @@ function loadValue(key)
 		--Decode Json
 		app = Json.Decode(contents)
 		if(not app.data) then app.data = {}; end
+		--close file
+		io.close( file )
 		--return value
 		return app.data[key]
 	end
