@@ -1,5 +1,9 @@
 module("dataSaver", package.seeall)
 
+if not json then
+	require "json"
+end
+
 function saveValue(key, value)
 	--temp variable
 	local app
@@ -11,7 +15,7 @@ function saveValue(key, value)
 		-- read all contents of file into a string
 		local contents = file:read( "*a" )
 		--Decode json
-		app = Json.Decode(contents)
+		app = json.decode(contents)
 		io.close( file )	-- close the file after using it
 		--if file was empty
 		if(not app.data) then
@@ -20,7 +24,7 @@ function saveValue(key, value)
 		--store value in table
 		app.data[key] = value
 		--Encode table to json
-		contents = Json.Encode(app)
+		contents = json.encode(app)
 		--open file
 		local file = io.open( path, "w" )
 		--store Json string in file
@@ -34,7 +38,7 @@ function saveValue(key, value)
 		--store value
 		app.data[key] = value
 		--Encode in Json
-		local contents = Json.Encode(app)
+		local contents = json.encode(app)
 		--create file
 		local file = io.open( path, "w" )
 		--save Json string in file
@@ -53,7 +57,7 @@ function loadValue(key)
 		--read contents
 		local contents = file:read( "*a" )
 		--Decode Json
-		app = Json.Decode(contents)
+		app = json.decode(contents)
 		if(not app.data) then app.data = {}; end
 		--close file
 		io.close( file )
@@ -66,7 +70,7 @@ end
 function save( filename, dataTable )
 	local path = filename..".json"
 	--Encode table into Json string
-	local JsonString = Json.Encode( dataTable )
+	local JsonString = json.encode( dataTable )
 	-- io.open opens a file at path. Creates one if doesn't exist
 	local file = io.open( path, "w" )
 	if file then
@@ -91,7 +95,7 @@ function load( filename )
 		-- close the file after using it
 		io.close( file )
 		--return Decoded Json string
-		return Json.Decode( contents )
+		return json.decode( contents )
 	else
 		--or return nil if file didn't ex
 		return nil
